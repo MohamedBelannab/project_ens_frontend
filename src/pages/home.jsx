@@ -9,6 +9,7 @@ const Home = () => {
     <>
     <NavbarWithMegaMenu/>
     <Outlet/>
+    <h1>hello</h1>
     </>
   )
 }
