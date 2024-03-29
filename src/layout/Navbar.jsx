@@ -30,6 +30,8 @@ import {
   TagIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/solid";
+import { Signup } from "../auth/signup";
+import { Link } from "react-router-dom";
  
 const navListMenuItems = [
   {
@@ -73,7 +75,7 @@ const navListMenuItems = [
     icon: RectangleGroupIcon,
   },
   {
-    title: "Special Offers",
+    title: "Voir plus",
     description: "Explore limited-time deals and bundles",
     icon: TagIcon,
   },
@@ -163,24 +165,25 @@ function NavList() {
     <List className="mt-4 mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
       <Typography
         as="a"
-        href="#"
-        variant="small"
-        color="blue-gray"
-        className="font-medium"
-      >
-        <ListItem className="flex items-center gap-2 py-2 pr-4">Home</ListItem>
-      </Typography>
-      <NavListMenu name={"Formations"} />
-      <NavListMenu name={"Départements"} />
-      <Typography
-        as="a"
-        href="#"
         variant="small"
         color="blue-gray"
         className="font-medium"
       >
         <ListItem className="flex items-center gap-2 py-2 pr-4">
-            étudiantes
+          <Link to='/'>Home</Link>
+        </ListItem>
+      </Typography>
+      <NavListMenu name={"Formations"} />
+      <NavListMenu name={"Départements"} />
+      <Typography
+        as="a"
+        variant="small"
+        color="blue-gray"
+        className="font-medium"
+      >
+        <ListItem className="flex items-center gap-2 py-2 pr-4">
+          <Link to='/étudiantes'>Étudiantes</Link>
+            
         </ListItem>
       </Typography>
     </List>
@@ -199,24 +202,22 @@ export function NavbarWithMegaMenu() {
  
   return (
    <>
-    <Navbar className="mx-auto max-w-full rounded-none px-4 py-2">
+    <Navbar className="mx-auto max-w-full rounded-none px-4 py-2 sticky top-0 z-50">
       <div className="flex items-center justify-between text-blue-gray-900">
         <Typography
           as="a"
-          href="#"
+          href="/"
           variant="h6"
           className="mr-4 cursor-pointer py-1.5 lg:ml-2"
         >
-          ENS 
+          <img src="./src/assets/logo.png" alt="ens" className="w-12" />
         </Typography>
         <div className="hidden lg:block">
           <NavList />
         </div>
         <div className="hidden gap-2 lg:flex">
           <Login/>
-          <Button variant="gradient" size="sm">
-          s'inscrire
-          </Button>
+          <Signup/>
         </div>
         <IconButton
           variant="text"

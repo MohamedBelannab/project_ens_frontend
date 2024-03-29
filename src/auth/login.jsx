@@ -4,7 +4,6 @@ import {
   Button,
   Dialog,
   Card,
-  CardHeader,
   CardBody,
   CardFooter,
   Typography,
@@ -30,33 +29,34 @@ export function Login() {
         <Card className="mx-auto w-full max-w-[24rem]">
           <CardBody className="flex flex-col gap-4">
             <Typography variant="h4" color="blue-gray">
-              Sign In
+              
+              Se connecter
             </Typography>
             <Typography
               className="mb-3 font-normal"
               variant="paragraph"
               color="gray"
             >
-              Enter your email and password to Sign In.
+              Entrez votre CNE et mot de passe pour vous connecter.
             </Typography>
             <Typography className="-mb-2" variant="h6">
-              Your Email
+              CNE
             </Typography>
-            <Input label="Email" size="lg" />
+            <Input label="CNE"  className=" disabled:bg-blue-50   outline-none  placeholder-shown:border-blue-200 placeholder-shown:border-t-blue-200  border-blue-200 focus:border-blue-500 " size="lg"  />
             <Typography className="-mb-2" variant="h6">
-              Your Password
+               Mot de passe
             </Typography>
-            <Input label="Password" size="lg" />
+            <Input label="Mot de passe" size="lg" />
             <div className="-ml-2.5 -mt-3">
               <Checkbox label="Remember Me" />
             </div>
           </CardBody>
           <CardFooter className="pt-0">
-            <Button variant="gradient" onClick={handleOpen} fullWidth>
-              Sign In
+            <Button color="blue" variant="gradient" onClick={handleOpen} fullWidth>
+              Se connecter
             </Button>
             <Typography variant="small" className="mt-4 flex justify-center">
-              Don&apos;t have an account?
+              Vous n&apos;avez pas de compte ?
               <Typography
                 as="a"
                 href="#signup"
@@ -65,7 +65,7 @@ export function Login() {
                 className="ml-1 font-bold"
                 onClick={handleOpen}
               >
-                Sign up
+                S'inscrire
               </Typography>
             </Typography>
           </CardFooter>

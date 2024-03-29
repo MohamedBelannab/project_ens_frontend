@@ -18,7 +18,7 @@ function Word({ children, ...props }) {
   }, [hovered])
   // Tie component to the render-loop
   useFrame(({ camera }) => {
-    ref.current.material.color.lerp(color.set(hovered ? '#fa2720' : 'white'), 0.1)
+    ref.current.material.color.lerp(color.set(hovered ? '#3b82f6' : 'white'), 0.1)
   })
   return (
     <Billboard {...props}>
@@ -43,23 +43,29 @@ function Cloud({ count = 4, radius = 20 }) {
 
 export default function Header() {
   return (
-    <div className='h-[45vh] w-full bg-black relative '>
-        <div className='absolute min-w-max z-10 top-[243px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white'>
-            <h1 class="text-xl md:text-2xl lg:text-4xl  font-extrabold">Ecole Normale Supérieure Tétouan</h1>
-        </div>
-        <div  className='absolute z-0  h-[45vh]  w-full left-1/2 transform -translate-x-1/2  blur-xs'>
+    <div className='h-[45vh] w-full relative '>
+    {/* Background image */}
+    <div className='absolute inset-0 bg-[url("./assets/ens.jpg")] bg-cover bg-center'></div>
+    {/* Black overlay with opacity */}
+    <div className='absolute inset-0 bg-black opacity-50'></div>
+    {/* Content */}
+    <div className='absolute min-w-max z-10 top-[243px] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white'>
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold">Ecole Normale Supérieure Tétouan</h1>
+    </div>
+    {/* Canvas */}
+    <div className='absolute z-10 h-[45vh] w-full left-1/2 transform -translate-x-1/2 blur-xs '>
         <Canvas dpr={[1, 2]} camera={{ position: [0, 0, 35], fov: 90 }}>
             <fog attach="fog" args={['#202025', 0, 80]} />
             <Suspense fallback={null}>
                 <group rotation={[10, 10.5, 10]}>
-                <Cloud count={8} radius={20} />
+                    <Cloud count={8} radius={20} />
                 </group>
             </Suspense>
             <TrackballControls />
         </Canvas>
-        </div>
-   
     </div>
+  </div>
+
     
   )
 }

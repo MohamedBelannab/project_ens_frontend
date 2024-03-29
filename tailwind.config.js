@@ -9,7 +9,13 @@ module.exports = withMT({
     extend: {
       blur: {
         xs: '2px',
+      } ,
+      colors : {
+        gray:{
+          900 : "#3b82f6"
+        }
       }
+      
     },
   },
   plugins: [],

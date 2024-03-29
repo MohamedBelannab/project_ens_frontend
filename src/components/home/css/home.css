@@ -1,0 +1,12 @@
+.borderText {
+    text-shadow: 
+      1px 1px 0 #3b82f6, 
+      -1px -1px 0 #3b82f6,
+      1px -1px 0 #3b82f6,
+      -1px 1px #3b82f6;
+  }
+
+
+  .rrr:focus {
+    outline-color: red !important;
+  }
