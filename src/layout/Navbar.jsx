@@ -191,7 +191,6 @@ function ProfileMenu() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {admin} =  useSelector(state => state.login.user)
-  console.log(admin);
  
   const closeMenu = () => setIsMenuOpen(false);
   const handleClick = (isLastItem) => {
@@ -282,8 +281,7 @@ function NavList() {
         className="font-medium"
       >
         <ListItem className="flex items-center gap-2 py-2 pr-4">
-          <Link to='/étudiantes'>Étudiantes</Link>
-            
+          <Link to='/étudiantes'>Étudiants</Link>
         </ListItem>
       </Typography>
       {

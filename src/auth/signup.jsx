@@ -15,8 +15,10 @@ import {
   Typography,
   Input,
   Select,
-  Option
+  Option,
+  Chip
 } from "@material-tailwind/react";
+import { ArrowUturnLeftIcon } from "@heroicons/react/24/outline";
 
 export function Signup() {
   const [open, setOpen] = useState(false);
@@ -36,21 +38,26 @@ export function Signup() {
 
   const handleOpen = () => setOpen((prevOpen) => !prevOpen);
 
-  const checkCne = async (cneValue, errors) => {
+  const goBack = () =>{
+    if (activeStep !=0) {
+      setActiveStep((cur) => cur - 1)
+    }
+  }
+
+  const checkCne = async (cneValue) => {
     try {
       const response = await api.get(`/checkcne/${cneValue}`);
       if (response.status === 200) {
         const { success } = response.data;
-        if (success) {
-          setActiveStep((prevStep) => prevStep + 1);
-          setData((prev)=> ({...prev , cne : cneValue}))
-         
+        if (!success) {
+          return true; // CNE is valid
         } else {
-          setError((prev) => ({...prev , cne : "Le CNE existe déjà"}));
+          return false;
         }
       }
     } catch (error) {
       console.error("Error checking CNE:", error);
+      return false;
     }
   };
   const register = async () => {
@@ -62,12 +69,11 @@ export function Signup() {
       }
    
     }).catch((err)=>{
-          let validate = err.response.data
-          console.log(validate);
+          console.log(err);
     })
 
   }
-  const validateInput = () => {
+  const validateInput = async() => {
     const errors = {};
     let isValid = true;
     if (activeStep === 0) {
@@ -85,7 +91,16 @@ export function Signup() {
         errors.cne = "CNE est requis";
         isValid = false;
       } else {
-        checkCne(cneValue, errors);
+        const isCneValid = await checkCne(cneValue);
+        if (isCneValid) {
+          errors.cne = "le CNE existe déjà";
+          isValid = false;
+        }else{
+          setData((prev)=> ({...prev , cne : cneValue}))
+        }
+      }
+      if (Object.keys(errors).length === 0) {
+        setActiveStep((cur) => cur + 1)
       }
     }
 
@@ -146,6 +161,7 @@ export function Signup() {
     }
     
     if (activeStep === 3) {
+      console.log(data);
       register()
       handleOpen()
     }
@@ -166,9 +182,13 @@ export function Signup() {
       >
         <Card className="mx-auto w-full max-w-[24rem]">
           <CardBody className="flex flex-col gap-4">
-            <Typography variant="h4" color="blue-gray">
+            <div className="flex justify-between">
+              <Typography variant="h4" color="blue-gray">
               S'inscrire
-            </Typography>
+              </Typography>
+              <Chip onClick={goBack} size="sm" className=" cursor-pointer"  icon={<ArrowUturnLeftIcon/>} color="blue" />
+            </div>
+            
             <Typography className="font-normal" variant="paragraph" color="gray">
               {activeStep === 3 ? "cliquez sur Terminer pour terminer l'inscription" : "Ravi de vous rencontrer! Entrez vos coordonnées pour vous inscrire."}
            

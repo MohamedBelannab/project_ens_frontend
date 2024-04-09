@@ -4,15 +4,19 @@ import { toast } from "react-toastify";
 
 
 
-export const fetchFormations = createAsyncThunk('filiers/fetchFormations', async () => {
-    const response = await api.get('/filiers/allFiliers');
+export const fetchStudents = createAsyncThunk('students/fetchStudents', async () => {
+    const response = await api.get('/students/allStudents', {
+        headers: {
+            Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+        }
+    });
     
     return response.data;  
 });
 
-export const addForamtion = createAsyncThunk('/storeFilier', async (formationData) => {
+export const addStudent = createAsyncThunk('/storeStudent', async (studentData) => {
     try {
-        const response = await api.post('/storeFilier', formationData, {
+        const response = await api.post('/storeStudent', studentData, {
             headers: {
                 Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`
             }
@@ -24,23 +28,9 @@ export const addForamtion = createAsyncThunk('/storeFilier', async (formationDat
     }
 });
 
-export const EditFormation = createAsyncThunk('/updateFiliere', async ( formationData) => {
+export const EditStudent = createAsyncThunk('/updateStudent', async ( studentData) => {
     try {
-        const response = await api.put(`/updateFiliere/${formationData.id}`, formationData.data, {
-            headers: {
-                Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`
-            }
-        });
-
-        return response.data;
-    } catch (error) {
-        throw Error(error.response.data);
-    }
-});
-
-export const DeleteFormation = createAsyncThunk('/delete', async ( formationData) => {
-    try {
-        const response = await api.delete(`/delete/${formationData.nameData}/${formationData.id}`,{
+        const response = await api.put(`/updateStudent/${studentData.id}`, studentData.data, {
             headers: {
                 Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`
             }
@@ -52,70 +42,83 @@ export const DeleteFormation = createAsyncThunk('/delete', async ( formationData
     }
 });
 
-const formationSlice = createSlice({
-    name: 'formation',
+export const DeleteStudent = createAsyncThunk('/delete', async ( studentData) => {
+    try {
+        const response = await api.delete(`/delete/${studentData.nameData}/${studentData.id}`,{
+            headers: {
+                Authorization: `Bearer ${JSON.parse(localStorage.getItem('token'))}`
+            }
+        });
+
+        return response.data;
+    } catch (error) {
+        throw Error(error.response.data.message);
+    }
+});
+
+const studentSlice = createSlice({
+    name: 'student',
     initialState: {
         status: 'idle',
         loading : false ,
-        formations: [],
+        students: [],
         error: null
     },
 
     extraReducers(builder) {
         builder
-            .addCase(fetchFormations.pending, (state, action) => {
+            .addCase(fetchStudents.pending, (state, action) => {
                 state.status = 'pending';
                 state.loading = true
             })
-            .addCase(fetchFormations.fulfilled, (state, action) => {
+            .addCase(fetchStudents.fulfilled, (state, action) => {
                 state.status = 'success';
                 state.loading = false
-                state.formations = action.payload.filiers; 
+                state.students = action.payload.students; 
             })
-            .addCase(fetchFormations.rejected, (state, action) => {
+            .addCase(fetchStudents.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
                 state.loading = true
             })
-            .addCase(addForamtion.pending, (state, action) => {
+            .addCase(addStudent.pending, (state, action) => {
                 state.loading = true;
                 state.status = 'pending';
             })
-            .addCase(addForamtion.fulfilled, (state, action) => {
+            .addCase(addStudent.fulfilled, (state, action) => {
                 state.loading = false;
                 state.status = 'success';
-                toast.success(`Formation créé !`)
+                toast.success(`Étudiant créé !`)
             })    
-            .addCase(addForamtion.rejected, (state, action) => {
-                state.loading = true ;
-                state.status = 'failed';
-                state.error = "Le Nom formation existe déjà";
-                toast.error(state.error)
-            })
-            .addCase(EditFormation.pending, (state, action) => {
-                state.loading = true;
-                state.status = 'pending';
-            })
-            .addCase(EditFormation.fulfilled, (state, action) => {
-                state.loading = false;
-                state.status = 'success';
-                toast.success(`Formation a été modifié!`)
-            })    
-            .addCase(EditFormation.rejected, (state, action) => {
+            .addCase(addStudent.rejected, (state, action) => {
                 state.loading = true ;
                 state.status = 'failed';
                 state.error = action.error.message;
             })
-            .addCase(DeleteFormation.pending, (state, action) => {
+            .addCase(EditStudent.pending, (state, action) => {
                 state.loading = true;
                 state.status = 'pending';
             })
-            .addCase(DeleteFormation.fulfilled, (state, action) => {
+            .addCase(EditStudent.fulfilled, (state, action) => {
                 state.loading = false;
                 state.status = 'success';
-                toast.success(`Formation a été supprimer!`)
+                toast.success(`L'étudiant a été modifié!`)
             })    
-            .addCase(DeleteFormation.rejected, (state, action) => {
+            .addCase(EditStudent.rejected, (state, action) => {
+                state.loading = true ;
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            .addCase(DeleteStudent.pending, (state, action) => {
+                state.loading = true;
+                state.status = 'pending';
+            })
+            .addCase(DeleteStudent.fulfilled, (state, action) => {
+                state.loading = false;
+                state.status = 'success';
+                toast.success(`L'étudiant a été supprimer!`)
+            })    
+            .addCase(DeleteStudent.rejected, (state, action) => {
                 state.loading = true ;
                 state.status = 'failed';
                 state.error = action.error.message;
@@ -123,4 +126,4 @@ const formationSlice = createSlice({
     }
 });
 
-export default formationSlice.reducer;
+export default studentSlice.reducer;

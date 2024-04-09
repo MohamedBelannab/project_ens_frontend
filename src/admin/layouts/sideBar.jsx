@@ -10,7 +10,7 @@ import {
   AccordionBody,
   Alert,
 } from "@material-tailwind/react";
-
+import logout from "../../auth/logout";
 import {
   ChevronRightIcon,
   ChevronDownIcon,
@@ -23,12 +23,14 @@ import {
   Cog6ToothIcon,
   PowerIcon,
 } from "@heroicons/react/24/outline";
- import { useSelector } from "react-redux";
- import { Link } from "react-router-dom";
+ import { useDispatch, useSelector } from "react-redux";
+ import { Link, useNavigate } from "react-router-dom";
 export function SidebarWithLogo() {
   const [open, setOpen] = React.useState(0);
   const [openAlert, setOpenAlert] = React.useState(true);
   const {prenom} =  useSelector(state => state.login.user)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
  
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
@@ -55,7 +57,7 @@ export function SidebarWithLogo() {
                 <AcademicCapIcon className="h-5 w-5" />
               </ListItemPrefix>
               <Typography color="blue-gray" className="mr-auto font-normal">
-                Étudiant
+                Étudiants
               </Typography>
             </AccordionHeader>
           </ListItem>
@@ -66,21 +68,10 @@ export function SidebarWithLogo() {
                 <ListItemPrefix>
                   <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                 </ListItemPrefix>
-                étudiantes
+                étudiants
               </ListItem>
               </Link>
-              <ListItem>
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                Reporting
-              </ListItem>
-              <ListItem>
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                Projects
-              </ListItem>
+            
             </List>
           </AccordionBody>
         </Accordion>
@@ -105,22 +96,29 @@ export function SidebarWithLogo() {
           </ListItem>
           <AccordionBody className="py-1">
             <List className="p-0">
+              
+              <Link to="formations">
               <ListItem>
                 <ListItemPrefix>
                   <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                 </ListItemPrefix>
-                Orders
+                formations
               </ListItem>
-              <ListItem>
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                Products
-              </ListItem>
+              </Link>
             </List>
           </AccordionBody>
-          <ListItem className="p-0" selected={open === 2}>
-            <AccordionHeader onClick={() => handleOpen(2)} className="border-b-0 p-3">
+        </Accordion>
+        <Accordion
+          open={open === 3}
+          icon={
+            <ChevronDownIcon
+              strokeWidth={2.5}
+              className={`mx-auto h-4 w-4 transition-transform ${open === 2 ? "rotate-180" : ""}`}
+            />
+          }
+        >
+          <ListItem className="p-0" selected={open === 3}>
+            <AccordionHeader onClick={() => handleOpen(3)} className="border-b-0 p-3">
               <ListItemPrefix>
                 <BuildingOffice2Icon className="h-5 w-5" />
               </ListItemPrefix>
@@ -147,12 +145,14 @@ export function SidebarWithLogo() {
           </AccordionBody>
         </Accordion>
         <hr className="my-2 border-blue-gray-50" />
-        <ListItem>
+          <Link to='/'>
+          <ListItem>
           <ListItemPrefix>
             <HomeIcon className="h-5 w-5" />
           </ListItemPrefix>
           Accueil
         </ListItem>
+          </Link>
         <ListItem>
           <ListItemPrefix>
             <UserCircleIcon className="h-5 w-5" />
@@ -165,7 +165,7 @@ export function SidebarWithLogo() {
           </ListItemPrefix>
           Paramètres
         </ListItem>
-        <ListItem className="hover:bg-red-500/10 hover:text-red-500 focus:bg-red-500/10 active:bg-red-500/10 text-red-500">
+        <ListItem onClick={() => {logout(dispatch, navigate)}} className="hover:bg-red-500/10 hover:text-red-500 focus:bg-red-500/10 active:bg-red-500/10 text-red-500">
           <ListItemPrefix>
             <PowerIcon className="h-5 w-5" />
           </ListItemPrefix>
