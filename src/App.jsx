@@ -18,6 +18,9 @@ const StudentAdmin = lazy(()=> import('./admin/pages/students'))
 const IndexStudent = lazy(()=> import('./admin/components/data-tabele/StudentDataTable'))
 const FormationAdmin = lazy(()=> import('./admin/pages/formation'))
 const IndexFormation = lazy(()=> import('./admin/components/data-tabele/formationDataTable'))
+const DepartementAdmin = lazy(()=> import('./admin/pages/departement'))
+const IndexDepartement = lazy(()=> import('./admin/components/data-tabele/departementDataTable'))
+
 function App() {
   let isLoged = useSelector(state=>state.login.isLoged)
   let dispatch = useDispatch()
@@ -79,6 +82,17 @@ function App() {
             <Route index element={
             <Suspense fallback={<Loading/>}>
               <IndexFormation />
+            </Suspense>
+            }/>
+          </Route>
+          <Route path='departements' element={
+          <Suspense fallback={<Loading/>}>
+            <DepartementAdmin />
+          </Suspense>
+          }>
+            <Route index element={
+            <Suspense fallback={<Loading/>}>
+              <IndexDepartement />
             </Suspense>
             }/>
           </Route>

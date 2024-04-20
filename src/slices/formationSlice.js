@@ -38,7 +38,7 @@ export const EditFormation = createAsyncThunk('/updateFiliere', async ( formatio
     }
 });
 
-export const DeleteFormation = createAsyncThunk('/delete', async ( formationData) => {
+export const DeleteFormation = createAsyncThunk('/deleteFormation', async ( formationData) => {
     try {
         const response = await api.delete(`/delete/${formationData.nameData}/${formationData.id}`,{
             headers: {
@@ -60,6 +60,11 @@ const formationSlice = createSlice({
         formations: [],
         error: null
     },
+    reducers: {
+        setFormationStatus : (state , action) => {
+            state.status = action.payload
+        }
+    } ,
 
     extraReducers(builder) {
         builder
@@ -122,5 +127,5 @@ const formationSlice = createSlice({
             });
     }
 });
-
+export const { setFormationStatus} = formationSlice.actions
 export default formationSlice.reducer;

@@ -15,9 +15,9 @@ import {
   Radio
 } from "@material-tailwind/react";
 import { UserPlusIcon } from "@heroicons/react/24/solid";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import api from "../../../api/api";
-import { addStudent } from '../../../slices/studentSlice';
+import { addStudent, setStudentStatus } from '../../../slices/studentSlice';
  
 export function AddStudent() {
   const [open, setOpen] = React.useState(false);
@@ -26,6 +26,7 @@ export function AddStudent() {
   const passwordRef = useRef(null);
   const confirmPassRef = useRef(null);
   const teleRef = useRef(null);
+  let filiers = useSelector(state => state.formation.formations)
 
   const [error, setError] = useState({});
   const [formation, setFormation] = useState('');
@@ -113,6 +114,8 @@ export function AddStudent() {
         password_confirme : confirmPassRef.current.querySelector("input").value.trim() ,
         filiere_id : formation 
       }))
+
+      dispatch(setStudentStatus('idle'))
 
       handleOpen()
 
@@ -213,8 +216,7 @@ export function AddStudent() {
             value={formation}
             onChange={(val) => setFormation(val)}
             >
-            <Option value="1">Filière 1</Option>
-            <Option value="2">Filière 2</Option>
+            {filiers && filiers.map((item , index) => <Option key={index} value={item.id}>{item.nomFilier}</Option> )}
             </Select>
             {error.formation && (
                   <Typography variant="small" color="gray" className="flex items-center gap-1 font-normal text-red-500 text-xs">

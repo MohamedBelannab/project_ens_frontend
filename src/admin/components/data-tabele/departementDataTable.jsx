@@ -1,7 +1,5 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { PencilIcon, UserPlusIcon , TrashIcon} from "@heroicons/react/24/solid";
 import { useState , useEffect } from "react";
-import { fetchStudents } from "../../../slices/studentSlice";
 import { useSelector  , useDispatch} from "react-redux";
 import moment from "moment";
 
@@ -12,19 +10,15 @@ import {
   Typography,
   Button,
   CardBody,
-  Chip,
   CardFooter,
   Tabs,
   TabsHeader,
   Tab,
   Avatar,
-  IconButton,
-  Tooltip,
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
-import { EditStudent } from "../students/editStudent";
-import { AddStudent } from "../students/addStudent";
-import { DeleteStudent } from "../students/deleteStudent";
+import { fetchDepartement } from "../../../slices/departementSlice";
+import { DeleteDepartement } from "../../departement/deleteDepartement";
+import { AddDepartement } from "../../departement/addDepartement";
  
 const TABS = [
   {
@@ -41,35 +35,24 @@ const TABS = [
   },
 ];
  
-const TABLE_HEAD = ["Étudiant", "Informations", "Statut", "Année", ""];
+const TABLE_HEAD = ["Départements", "Formation", "Année", ""];
 
  
-  const StudentsDataTable = () => {
+  const DepartementDataTable = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [searchTabs , setSearchTabs] = useState(null)
     const [currentPage, setCurrentPage] = useState(1);
-    let status = useSelector((state) => state.student.status);
-    let students = useSelector((state) => state.student.students);
-    console.log( "ok" ,students);
+    let departements = useSelector((state) => state.departement.departements);
+    let status = useSelector((state) => state.departement.status);
+    console.table(departements);
     const dispatch = useDispatch()
     const pageSize = 6;
   
-    
+   
   
-    const filteredRows = students.filter((row) => {
-      if (searchTabs === null) {
+    const filteredRows = departements.filter((row) => {
         return (
-          row.prenom.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          row.tele.toLowerCase().includes(searchTerm.toLowerCase()) || 
-          row.filiere.nomFilier.toLowerCase().includes(searchTerm.toLowerCase())
+          row.nomDepartement.toLowerCase().includes(searchTerm.toLowerCase()) 
         );
-      } else {
-        return (
-          (row.status === searchTabs) &&
-          (row.prenom.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          row.tele.toLowerCase().includes(searchTerm.toLowerCase()))
-        );
-      }
     });
   
     const totalPages = Math.ceil(filteredRows.length / pageSize);
@@ -92,43 +75,34 @@ const TABLE_HEAD = ["Étudiant", "Informations", "Statut", "Année", ""];
       setSearchTerm(e.target.value);
       setCurrentPage(1); // Reset page to 1 when performing a new search
     };
-
     useEffect(() => {
-      if ( status == 'idle') {
-       dispatch(fetchStudents())
+      if (status == 'idle') {
+       dispatch(fetchDepartement())
       }
        
      }, [status]);
-  
   return (
     <Card className="h-full w-full">
       <CardHeader floated={false} shadow={false} className="rounded-none">
         <div className="mb-8 flex items-center justify-between gap-8">
           <div>
             <Typography variant="h5" color="blue-gray">
-            Liste des étudiants
+            Liste des départements
             </Typography>
             <Typography color="gray" className="mt-1 font-normal">
-            Voir les informations sur tous les étudiants
+            Voir les informations sur tous les départements
             </Typography>
           </div>
           <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
             <Button variant="outlined" size="sm">
             Voir tout
             </Button>
-            <AddStudent/>
+            <AddDepartement/>
             
           </div>
         </div>
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
           <Tabs value="all" className="w-full md:w-max">
-            <TabsHeader>
-              {TABS.map(({ label, value }) => (
-                <Tab onClick={(e) => {setSearchTabs(value)}} key={value} value={value}>
-                  &nbsp;&nbsp;{label}&nbsp;&nbsp;
-                </Tab>
-              ))}
-            </TabsHeader>
           </Tabs>
           <div className="w-full md:w-72">
             <Input
@@ -163,8 +137,8 @@ const TABLE_HEAD = ["Étudiant", "Informations", "Statut", "Année", ""];
             {
               
               getVisibleRows().map(
-              ({ id , prenom, filiere, cne, tele, createdAt, status  }, index) => {
-                const isLast = index === students.length - 1;
+              ({ id , nomDepartement , createdAt , filiers }, index) => {
+                const isLast = index === departements.length - 1;
                 const classes = isLast
                   ? "p-4"
                   : "p-4 border-b border-blue-gray-50";
@@ -173,21 +147,21 @@ const TABLE_HEAD = ["Étudiant", "Informations", "Statut", "Année", ""];
                   <tr key={index}>
                     <td className={classes}>
                       <div className="flex items-center gap-3">
-                        <Avatar src={`https://api.dicebear.com/8.x/initials/svg?seed=${prenom}&backgroundColor=1e88e5`} alt={prenom} size="sm" />
+                        <Avatar src={`https://api.dicebear.com/8.x/initials/svg?seed=${nomDepartement}&backgroundColor=1e88e5`} alt={nomDepartement} size="sm" />
                         <div className="flex flex-col">
                           <Typography
                             variant="small"
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {prenom}
+                            {nomDepartement}
                           </Typography>
                           <Typography
                             variant="small"
                             color="blue-gray"
                             className="font-normal opacity-70"
                           >
-                            {filiere.nomFilier}
+                            Ecole Normale Supérieure Tétouan
                           </Typography>
                         </div>
                       </div>
@@ -199,25 +173,15 @@ const TABLE_HEAD = ["Étudiant", "Informations", "Statut", "Année", ""];
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {cne}
+                          {filiers.length } formations
                         </Typography>
                         <Typography
                           variant="small"
                           color="blue-gray"
                           className="font-normal opacity-70"
                         >
-                          {tele}
+                           Ecole Normale Supérieure Tétouan
                         </Typography>
-                      </div>
-                    </td>
-                    <td className={classes}>
-                      <div className="w-max">
-                        <Chip
-                          variant="ghost"
-                          size="sm"
-                          value={status ? "Activé" : "Inactif"}
-                          color={status ? "green" : "blue-gray"}
-                        />
                       </div>
                     </td>
                     <td className={classes}>
@@ -230,8 +194,9 @@ const TABLE_HEAD = ["Étudiant", "Informations", "Statut", "Année", ""];
                       </Typography>
                     </td>
                     <td className={classes}>
-                      <EditStudent id={id}/>
-                      <DeleteStudent name={prenom} id={id}/>
+                      <DeleteDepartement name={nomDepartement} id={id} />
+                      {/* <DeleteForamation name={nomFilier} id={id} />
+                      <EditFormation id={id} /> */}
                     </td>
                   </tr>
                 );
@@ -259,4 +224,4 @@ const TABLE_HEAD = ["Étudiant", "Informations", "Statut", "Année", ""];
   );
 }
 
-export default StudentsDataTable
+export default DepartementDataTable

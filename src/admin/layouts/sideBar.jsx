@@ -22,6 +22,7 @@ import {
   UserCircleIcon,
   Cog6ToothIcon,
   PowerIcon,
+  ChartPieIcon
 } from "@heroicons/react/24/outline";
  import { useDispatch, useSelector } from "react-redux";
  import { Link, useNavigate } from "react-router-dom";
@@ -129,22 +130,27 @@ export function SidebarWithLogo() {
           </ListItem>
           <AccordionBody className="py-1">
             <List className="p-0">
+              <Link to='departements'>
               <ListItem>
                 <ListItemPrefix>
                   <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
                 </ListItemPrefix>
-                Orders
+                départements
               </ListItem>
-              <ListItem>
-                <ListItemPrefix>
-                  <ChevronRightIcon strokeWidth={3} className="h-3 w-5" />
-                </ListItemPrefix>
-                Products
-              </ListItem>
+              </Link>
+              
             </List>
           </AccordionBody>
         </Accordion>
         <hr className="my-2 border-blue-gray-50" />
+        <Link to='/dashboard'>
+          <ListItem>
+          <ListItemPrefix>
+            <ChartPieIcon className="h-5 w-5" />
+          </ListItemPrefix>
+          Aperçus
+        </ListItem>
+          </Link>
           <Link to='/'>
           <ListItem>
           <ListItemPrefix>

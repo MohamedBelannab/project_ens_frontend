@@ -12,15 +12,15 @@ import {
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { useDispatch } from "react-redux";
-import { DeleteFormation as formationDelte, setFormationStatus  } from "../../../slices/formationSlice";
+import { DeleteDepartement as departementDelete, setDepartementStatus } from "../../slices/departementSlice";
  
-export function DeleteForamation({id , name}) {
+export function DeleteDepartement({id , name}) {
   const [open, setOpen] = React.useState(false);
   const dispatch = useDispatch()
 
-  const deleteFormation = () =>{
-    dispatch(formationDelte({nameData : "filier" , id : id}))
-    dispatch(setFormationStatus('idle'))
+  const deleteDepartement = () =>{
+    dispatch(departementDelete({nameData : "departement" , id : id}))
+    dispatch(setDepartementStatus('idle'))
     handleOpen()
   }
 
@@ -48,14 +48,14 @@ export function DeleteForamation({id , name}) {
             Tu devrais lire ça !
           </Typography>
           <Typography className="text-center font-normal">
-            Voulez-vous vraiment supprimer cet formation {name}
+            Voulez-vous vraiment supprimer cet Departement {name}
           </Typography>
         </DialogBody>
         <DialogFooter className="space-x-2">
           <Button variant="text" color="blue-gray" onClick={handleOpen}>
           fermer
           </Button>
-          <Button onClick={deleteFormation} color="blue" variant="gradient" >
+          <Button onClick={deleteDepartement} color="blue" variant="gradient" >
           Ok, je l'ai compris
           </Button>
         </DialogFooter>

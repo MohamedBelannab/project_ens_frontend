@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
   Dialog,
@@ -16,11 +16,12 @@ import {
 import { PencilIcon } from "@heroicons/react/24/solid";
 import { useDispatch, useSelector } from "react-redux";
 import api from "../../../api/api";
-import { EditStudent  as studentEdit} from "../../../slices/studentSlice";
+import { setStudentStatus, EditStudent  as studentEdit} from "../../../slices/studentSlice";
  
 export function EditStudent({id}) {
   const [open, setOpen] = React.useState(false);
   const cneRef = useRef(null);
+  let filiers = useSelector(state => state.formation.formations)
   const fullnameRef = useRef(null);
   const passwordRef = useRef(null);
   const confirmPassRef = useRef(null);
@@ -114,6 +115,7 @@ export function EditStudent({id}) {
         password_confirme : confirmPassRef.current.querySelector("input").value.trim() ,
         filiere_id : formation 
       }}))
+      dispatch(setStudentStatus('idle'))
 
       handleOpen()
      
@@ -122,6 +124,14 @@ export function EditStudent({id}) {
 
  
   const handleOpen = () => setOpen(!open);
+  useEffect(()=>{
+    if (student) {
+      setFormation(student.filiere.id)
+    }
+    
+    console.log(student);
+  }, [student])
+
  
   return (
     <>
@@ -215,8 +225,7 @@ export function EditStudent({id}) {
             value={formation}
             onChange={(val) => setFormation(val)}
             >
-            <Option value="1">Filière 1</Option>
-            <Option value="2">Filière 2</Option>
+             {filiers && filiers.map((item , index) => <Option key={index} value={item.id}>{item.nomFilier}</Option> )}
             </Select>
             {error.formation && (
                   <Typography variant="small" color="gray" className="flex items-center gap-1 font-normal text-red-500 text-xs">

@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import { setUser , setIsloged } from "../slices/loginSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import api from "../api/api";
 import Lottie from 'lottie-react'
 import approve from '../assets/approve.json'
@@ -19,15 +19,17 @@ import {
   Chip
 } from "@material-tailwind/react";
 import { ArrowUturnLeftIcon } from "@heroicons/react/24/outline";
+import { Each } from "../components/each/each";
 
 export function Signup() {
   const [open, setOpen] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
   const [formation, setFormation] = useState(null);
   let dispatch = useDispatch()
   let [data , setData] = useState({})
+  let filiers = useSelector(state => state.formation.formations)
+  console.log(filiers);
 
 
   const cneRef = useRef(null);
@@ -269,8 +271,9 @@ export function Signup() {
                   value={formation}
                   onChange={(val) => setFormation(val)}
                 >
-                  <Option value="1">Filière 1</Option>
-                  <Option value="2">Filière 2</Option>
+                  {filiers && filiers.map((item , index) => <Option key={index} value={item.id}>{item.nomFilier}</Option> )}
+                 
+                  
                 </Select>
                 {error.formation && (
                   <Typography variant="small" color="gray" className="flex items-center gap-1 font-normal text-red-500 text-xs">

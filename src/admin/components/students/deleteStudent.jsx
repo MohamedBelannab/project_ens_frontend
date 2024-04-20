@@ -11,7 +11,7 @@ import {
 } from "@material-tailwind/react";
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
-import { DeleteStudent  as studentDelte} from "../../../slices/studentSlice";
+import { setStudentStatus, DeleteStudent  as studentDelte} from "../../../slices/studentSlice";
 import { useDispatch } from "react-redux";
  
 export function DeleteStudent({id , name}) {
@@ -20,6 +20,7 @@ export function DeleteStudent({id , name}) {
 
   const deleteStudent = () =>{
     dispatch(studentDelte({nameData : "student" , id : id}))
+    dispatch(setStudentStatus('idle'))
     handleOpen()
   }
 

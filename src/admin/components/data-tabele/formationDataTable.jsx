@@ -19,8 +19,8 @@ import {
   Avatar,
 } from "@material-tailwind/react";
 import { AddForamtion } from "../formation/addFormation";
-// import { AddStudent } from "../students/addStudent";
-// import { DeleteStudent } from "../students/deleteStudent";
+import { EditFormation } from "../formation/editFormation";
+import { DeleteForamation } from "../formation/deleteFormation";
  
 const TABS = [
   {
@@ -40,35 +40,27 @@ const TABS = [
 const TABLE_HEAD = ["Formation", "Départements", "Année", ""];
 
  
-  const StudentsDataTable = () => {
+  const FormationDataTable = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [searchTabs , setSearchTabs] = useState(null)
     const [currentPage, setCurrentPage] = useState(1);
     let loading = useSelector((state) => state.formation.loading);
+    let status = useSelector((state) => state.formation.status);
     let formations = useSelector((state) => state.formation.formations);
     const dispatch = useDispatch()
     const pageSize = 6;
   
     useEffect(() => {
-     if (loading) {
+     if ( status == 'idle') {
       dispatch(fetchFormations())
      }
       
-    }, [loading]);
+    }, [status]);
   
     const filteredRows = formations.filter((row) => {
-      if (searchTabs === null) {
         return (
           row.nomFilier.toLowerCase().includes(searchTerm.toLowerCase())  ||
           row.departement.toLowerCase().includes(searchTerm.toLowerCase()) 
         );
-      } else {
-        return (
-          (row.status === searchTabs) &&
-          (row.prenom.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          row.tele.toLowerCase().includes(searchTerm.toLowerCase()))
-        );
-      }
     });
   
     const totalPages = Math.ceil(filteredRows.length / pageSize);
@@ -114,13 +106,6 @@ const TABLE_HEAD = ["Formation", "Départements", "Année", ""];
         </div>
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
           <Tabs value="all" className="w-full md:w-max">
-            <TabsHeader>
-              {TABS.map(({ label, value }) => (
-                <Tab onClick={(e) => {setSearchTabs(value)}} key={value} value={value}>
-                  &nbsp;&nbsp;{label}&nbsp;&nbsp;
-                </Tab>
-              ))}
-            </TabsHeader>
           </Tabs>
           <div className="w-full md:w-72">
             <Input
@@ -212,8 +197,8 @@ const TABLE_HEAD = ["Formation", "Départements", "Année", ""];
                       </Typography>
                     </td>
                     <td className={classes}>
-                      {/* <EditStudent id={id}/>
-                      <DeleteStudent name={nomFilier} id={id}/> */}
+                      <DeleteForamation name={nomFilier} id={id} />
+                      <EditFormation id={id} />
                     </td>
                   </tr>
                 );
@@ -241,4 +226,4 @@ const TABLE_HEAD = ["Formation", "Départements", "Année", ""];
   );
 }
 
-export default StudentsDataTable
+export default FormationDataTable

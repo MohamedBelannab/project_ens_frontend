@@ -36,6 +36,7 @@ import {
   UserCircleIcon ,
   Cog6ToothIcon,
   InboxArrowDownIcon ,
+  BuildingOfficeIcon,
   LifebuoyIcon ,
   PowerIcon
 } from "@heroicons/react/24/solid";
@@ -43,53 +44,53 @@ import { Signup } from "../auth/signup";
 import { Link } from "react-router-dom";
 import logout from "../auth/logout";
  
-const navListMenuItems = [
-  {
-    title: "Products",
-    description: "Find the perfect solution for your needs.",
-    icon: SquaresPlusIcon,
-  },
-  {
-    title: "About Us",
-    description: "Meet and learn about our dedication",
-    icon: UserGroupIcon,
-  },
-  {
-    title: "Blog",
-    description: "Find the perfect solution for your needs.",
-    icon: Bars4Icon,
-  },
-  {
-    title: "Services",
-    description: "Learn how we can help you achieve your goals.",
-    icon: SunIcon,
-  },
-  {
-    title: "Support",
-    description: "Reach out to us for assistance or inquiries",
-    icon: GlobeAmericasIcon,
-  },
-  {
-    title: "Contact",
-    description: "Find the perfect solution for your needs.",
-    icon: PhoneIcon,
-  },
-  {
-    title: "News",
-    description: "Read insightful articles, tips, and expert opinions.",
-    icon: NewspaperIcon,
-  },
-  {
-    title: "Products",
-    description: "Find the perfect solution for your needs.",
-    icon: RectangleGroupIcon,
-  },
-  {
-    title: "Voir plus",
-    description: "Explore limited-time deals and bundles",
-    icon: TagIcon,
-  },
-];
+// const navListMenuItems = [
+//   {
+//     title: "Products",
+//     description: "Find the perfect solution for your needs.",
+//     icon: SquaresPlusIcon,
+//   },
+//   {
+//     title: "About Us",
+//     description: "Meet and learn about our dedication",
+//     icon: UserGroupIcon,
+//   },
+//   {
+//     title: "Blog",
+//     description: "Find the perfect solution for your needs.",
+//     icon: Bars4Icon,
+//   },
+//   {
+//     title: "Services",
+//     description: "Learn how we can help you achieve your goals.",
+//     icon: SunIcon,
+//   },
+//   {
+//     title: "Support",
+//     description: "Reach out to us for assistance or inquiries",
+//     icon: GlobeAmericasIcon,
+//   },
+//   {
+//     title: "Contact",
+//     description: "Find the perfect solution for your needs.",
+//     icon: PhoneIcon,
+//   },
+//   {
+//     title: "News",
+//     description: "Read insightful articles, tips, and expert opinions.",
+//     icon: NewspaperIcon,
+//   },
+//   {
+//     title: "Products",
+//     description: "Find the perfect solution for your needs.",
+//     icon: RectangleGroupIcon,
+//   },
+//   {
+//     title: "Voir plus",
+//     description: "Explore limited-time deals and bundles",
+//     icon: TagIcon,
+//   },
+// ];
  
 const profileMenuItems = [
   {
@@ -106,16 +107,18 @@ const profileMenuItems = [
   },
 ];
 
-function NavListMenu({name}) {
+function NavListMenu({name , data}) {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-  const renderItems = navListMenuItems.map(
-    ({ icon, title, description }, key) => (
+  let renderItems 
+  if (name == 'Départements') {
+    renderItems = data.slice(0, 6).map(
+    ({ nomDepartement}, key) => (
       <a href="#" key={key}>
         <MenuItem className="flex items-center gap-3 rounded-lg">
           <div className="flex items-center justify-center rounded-lg !bg-blue-gray-50 p-2 ">
             {" "}
-            {React.createElement(icon, {
+            {React.createElement(BuildingOfficeIcon, {
               strokeWidth: 2,
               className: "h-6 text-gray-900 w-6",
             })}
@@ -126,19 +129,54 @@ function NavListMenu({name}) {
               color="blue-gray"
               className="flex items-center text-sm font-bold"
             >
-              {title}
+              {nomDepartement}
             </Typography>
             <Typography
               variant="paragraph"
               className="text-xs !font-medium text-blue-gray-500"
             >
-              {description}
+              Ecole Normale Supérieure Tétouan
             </Typography>
           </div>
         </MenuItem>
       </a>
     ),
   );
+  }else{
+    renderItems = data.slice(0,6).map(
+      ({ nomFilier  , departement}, key) => (
+        <a href="#" key={key}>
+          <MenuItem className="flex items-center gap-3 rounded-lg">
+            <div className="flex items-center justify-center rounded-lg !bg-blue-gray-50 p-2 ">
+              {" "}
+              {React.createElement(NewspaperIcon, {
+                strokeWidth: 2,
+                className: "h-6 text-gray-900 w-6",
+              })}
+            </div>
+            <div>
+              <Typography
+                variant="h6"
+                color="blue-gray"
+                className="flex items-center text-sm font-bold"
+              >
+                {nomFilier}
+              </Typography>
+              <Typography
+                variant="paragraph"
+                className="text-xs !font-medium text-blue-gray-500"
+              >
+               {departement}
+              </Typography>
+            </div>
+          </MenuItem>
+        </a>
+      )
+      
+    );
+
+  }
+  
  
   return (
     <React.Fragment>
@@ -260,8 +298,11 @@ function ProfileMenu() {
  
 function NavList() {
   const {admin}=  useSelector(state => state.login.user)
+  let departements = useSelector((state) => state.departement.departements);
+  let filiers = useSelector(state => state.formation.formations)
   return (
     <List className="mt-4 mb-6 p-0 lg:mt-0 lg:mb-0 lg:flex-row lg:p-1">
+      <Link to='/'>
       <Typography
         as="a"
         variant="small"
@@ -269,21 +310,26 @@ function NavList() {
         className="font-medium"
       >
         <ListItem className="flex items-center gap-2 py-2 pr-4">
-          <Link to='/'>Accueil</Link>
+          Accueil
         </ListItem>
       </Typography>
-      <NavListMenu name={"Formations"} />
-      <NavListMenu name={"Départements"} />
-      <Typography
+      </Link>
+      
+      <NavListMenu name={"Formations"}  data={filiers}/>
+      <NavListMenu name={"Départements"} data={departements}/>
+      <Link to='/étudiantes'>
+      <Typography Typography
         as="a"
         variant="small"
         color="blue-gray"
         className="font-medium"
       >
         <ListItem className="flex items-center gap-2 py-2 pr-4">
-          <Link to='/étudiantes'>Étudiants</Link>
+          Étudiants
         </ListItem>
       </Typography>
+      </Link>
+      
       {
         admin && 
         <Typography

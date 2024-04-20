@@ -42,7 +42,7 @@ export const EditStudent = createAsyncThunk('/updateStudent', async ( studentDat
     }
 });
 
-export const DeleteStudent = createAsyncThunk('/delete', async ( studentData) => {
+export const DeleteStudent = createAsyncThunk('/deleteStudent', async ( studentData) => {
     try {
         const response = await api.delete(`/delete/${studentData.nameData}/${studentData.id}`,{
             headers: {
@@ -64,6 +64,11 @@ const studentSlice = createSlice({
         students: [],
         error: null
     },
+    reducers: {
+        setStudentStatus : (state , action) => {
+            state.status = action.payload
+        }
+    } ,
 
     extraReducers(builder) {
         builder
@@ -125,5 +130,5 @@ const studentSlice = createSlice({
             });
     }
 });
-
+export const { setStudentStatus} = studentSlice.actions
 export default studentSlice.reducer;

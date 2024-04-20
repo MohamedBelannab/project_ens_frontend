@@ -1,6 +1,9 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
+import { Each } from '../each/each'
 
 const InfoHome = () => {
+    let filiers = useSelector(state => state.formation.formations)
   return (
 <div className='relative inset-0'>
     {/* Background image */}
@@ -29,43 +32,24 @@ const InfoHome = () => {
                     <h2 className="text-xl font-semibold tracking-tighter sm:text-2xl text-white">
                         Formations
                     </h2>
-                    <p className="text-3xl font-bold text-blue-500">100</p>
+                    <p className="text-3xl font-bold text-blue-500">{filiers.length}</p>
                 </div>
             </div>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-4">
-            <div className="rounded-lg bg-white  border-4 border-blue-500 border-dashed bg-card text-card-foreground shadow-sm" data-v0-t="card">
+            <Each of={filiers.slice(0,4)} render={(item , index) => <div data-aos="zoom-in" data-aos-delay="50" className="rounded-lg bg-white  border-4 border-blue-500 border-dashed bg-card text-card-foreground shadow-sm" data-v0-t="card">
                 <div className="flex flex-col space-y-1.5 p-6 ">
                     <h3 className="text-xl font-semibold whitespace-nowrap leading-none tracking-tight">
-                        Computer Science
+                        {item.nomFilier}
                     </h3>
                     <p className="text-sm text-muted-foreground">
                         The Computer Science program provides students with a comprehensive
                         understanding of computer software, hardware, and programming.
                     </p>
                 </div>
-            </div>
-            <div className="rounded-lg bg-white  border-4 border-blue-500 border-dashed bg-card text-card-foreground shadow-sm" data-v0-t="card">
-                <div className="flex flex-col space-y-1.5 p-6 ">
-                    <h3 className="text-xl font-semibold whitespace-nowrap leading-none tracking-tight">
-                        Business Administration
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                        The Business Administration program equips stud
-                    </p>
-                </div>
-            </div>
-            <div className="rounded-lg bg-white  border-4 border-blue-500 border-dashed bg-card text-card-foreground shadow-sm" data-v0-t="card">
-                <div className="flex flex-col space-y-1.5 p-6 ">
-                    <h3 className="text-xl font-semibold whitespace-nowrap leading-none tracking-tight">
-                        Electrical Engineering
-                    </h3>
-                    <p className="text-sm text-muted-foreground">
-                        The Electrical Engineering program offers students a comprehensive
-                        education in the principles and practices of electrical engineering.
-                    </p>
-                </div>
-            </div>
+            </div>} />
+            
+
         </div>
     </div>
 </div>
